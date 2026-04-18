@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>42ITIRAF - The Raw Signal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#1a1919", "primary": "#9cff93", "primary-dim": "#00ec3b",
+                        "background": "#0e0e0e", "surface": "#0e0e0e", "surface-dim": "#0e0e0e",
+                        "surface-container-low": "#131313", "surface-container-lowest": "#000000",
+                        "surface-container-high": "#201f1f", "surface-container-highest": "#262626",
+                        "surface-bright": "#2c2c2c", "surface-variant": "#262626",
+                        "on-background": "#ffffff", "on-surface": "#ffffff",
+                        "on-surface-variant": "#adaaaa", "outline": "#777575", "outline-variant": "#494847",
+                        "secondary": "#ff7436", "secondary-container": "#a63b00", "secondary-dim": "#ff7436",
+                        "error": "#ff7351", "on-primary": "#006413"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Space Grotesk", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            font-family: theme('fontFamily.body');
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .ambient-glow { box-shadow: 0 0 40px rgba(156, 255, 147, 0.05); }
+        .ghost-border { border: 1px solid rgba(73, 72, 71, 0.15); }
+        .thread-line { border-left: 2px solid rgba(73, 72, 71, 0.15); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000000; }
+        ::-webkit-scrollbar-thumb { background: #262626; }
+        details > summary::-webkit-details-marker { display: none; }
+        .text-neon-glow { text-shadow: 0 0 10px rgba(156, 255, 147, 0.4); }
+        .box-glow { box-shadow: 0 0 40px rgba(156, 255, 147, 0.05); }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col antialiased selection:bg-primary selection:text-on-primary">
+    <nav class="fixed top-0 w-full z-50 rounded-none border-b border-[#494847]/15 bg-[#131313] flat shadow-none bg-[#0e0e0e] text-[#00FF41] font-['Space_Grotesk'] tracking-tighter uppercase text-sm flex flex-col w-full">
+        <div class="flex justify-between items-center px-4 md:px-8 py-3 w-full relative">
+            <a href="index.html" class="text-xl md:text-2xl font-black text-[#00FF41] tracking-[-0.04em] shrink-0 md:mr-12 cursor-pointer hover:bg-[#201f1f] p-2 active:scale-[0.98] transition-transform duration-100 flex gap-2 no-underline items-center">
+                42ITIRAF
+            </a>
+            <div class="hidden md:flex flex-1 justify-start gap-8 h-full items-center pt-2">
+                <a href="index.html" class="text-[#00FF41] border-b-2 border-[#00FF41] pb-1 hover:bg-[#201f1f] px-2">LAST POSTS</a>
+                <a href="top.html" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors pb-1 border-b-2 border-transparent hover:bg-[#201f1f] px-2">TOP POSTS</a>
+                <a href="trending.html" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors pb-1 border-b-2 border-transparent hover:bg-[#201f1f] px-2">TRENDING POSTS</a>
+                <a href="controversial.html" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors pb-1 border-b-2 border-transparent hover:bg-[#201f1f] px-2">CONTROVERSIAL POSTS</a>
+                
+            </div>
+            
+            <!-- Trailing Actions -->
+            <div class="flex items-center gap-2 md:gap-6 shrink-0">
+                <div class="flex gap-2 md:gap-4">
+                    <button id="nav-search-btn" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors hover:bg-[#201f1f] p-2 active:scale-[0.98] transition-transform duration-100 flex items-center justify-center">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                    <a href="login.html" id="nav-account-btn" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors hover:bg-[#201f1f] p-2 active:scale-[0.98] flex items-center justify-center">
+                        <span class="material-symbols-outlined">account_circle</span>
+                    </a>
+                    <a href="profile.html?id=CURRENT_USER" id="nav-profile-btn" style="display:none;" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors hover:bg-[#201f1f] p-2 active:scale-[0.98] flex items-center justify-center">
+                        <span class="material-symbols-outlined">person</span>
+                    </a>
+                    <button id="nav-logout-btn" class="hidden text-error hover:text-error-dim transition-colors hover:bg-[#201f1f] p-2 active:scale-[0.98] flex items-center justify-center" onclick="logoutUser()">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+                <a href="new-post.html" id="nav-new-post" style="display:none;" class="md:flex items-center bg-primary text-on-primary font-bold px-6 py-2 hover:bg-primary-dim transition-colors active:scale-[0.98] cursor-pointer">
+                    NEW SIGNAL
+                </a>
+            </div>
+        </div>
+        <!-- Search Bar Dropdown -->
+        <div id="nav-search-bar" class="hidden w-full bg-[#131313] border-t border-[#494847]/15 p-4 flex justify-center shadow-lg">
+            <input type="text" placeholder="Trace signal ID, topic, or content..." class="w-full max-w-2xl bg-[#000000] border border-[#494847] text-[#9cff93] font-label text-lg p-3 placeholder:text-[#adaaaa]/30 focus:outline-none focus:border-[#00FF41] transition-colors" />
+        </div>
+    </nav>
+    
+    <!-- SETTINGS MODAL -->
+    <dialog id="settings-modal" class="fixed inset-0 m-auto bg-surface-bright/90 backdrop-blur-md p-6 sm:p-8 ghost-border shadow-2xl z-50 w-full max-w-sm text-on-surface flex-col gap-6">
+        <h3 class="font-headline font-bold text-xl uppercase tracking-wider text-primary border-b border-outline-variant pb-2">CONFIGURE NODE</h3>
+        <p class="text-xs text-on-surface-variant font-label uppercase">Warning: Some actions are irreversible.</p>
+        
+        <div class="flex flex-col gap-4">
+            <button onclick="window.profileActions.freeze()" class="w-full bg-surface-container-highest border border-secondary text-secondary hover:bg-secondary hover:text-black py-4 font-headline uppercase font-bold tracking-widest transition-colors">Dondur (Freeze Trace)</button>
+            <button onclick="document.getElementById('pwd-input').classList.toggle('hidden')" class="w-full box-border border border-outline-variant text-on-surface hover:border-primary py-4 font-headline uppercase font-bold tracking-widest transition-colors">Şifre Değiştir</button>
+            
+            <div id="pwd-input" class="hidden flex flex-col gap-2">
+                <input id="old-pw" type="password" placeholder="Old Password" class="bg-black border border-outline-variant p-2 text-sm text-on-surface placeholder:text-on-surface-variant/30"/>
+                <input id="new-pw" type="password" placeholder="New Password" class="bg-black border border-outline-variant p-2 text-sm text-on-surface placeholder:text-on-surface-variant/30"/>
+                <button onclick="window.profileActions.changePw()" class="bg-primary text-black py-2 font-headline uppercase text-xs font-bold w-1/2 mt-1">Execute</button>
+                <span id="pw-err" class="text-error text-xs hidden"></span>
+            </div>
+            
+            <button onclick="window.profileActions.destruct()" class="w-full bg-error text-black hover:bg-error-dim mt-4 py-4 font-headline uppercase font-bold tracking-widest transition-colors">Hesabı Sil (Destruct)</button>
+        </div>
+        
+        <div class="flex justify-between mt-2 pt-4 border-t border-outline-variant">
+            <button onclick="document.getElementById('settings-modal').close()" class="text-on-surface-variant hover:text-on-surface font-headline uppercase font-bold tracking-widest transition-colors text-sm">Abort</button>
+        </div>
+    </dialog>
+
+    <main class="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-24 flex flex-col gap-8 relative">
+        <header class="flex items-center gap-6 p-8 bg-surface-container-low border-b-4 border-primary mt-8 relative">
+            <div class="w-24 h-24 bg-surface-container-low border-2 border-primary overflow-hidden flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(156,255,147,0.2)]">
+                <span class="material-symbols-outlined text-5xl text-primary opacity-80">sentiment_neutral</span>
+            </div>
+            <div class="flex flex-col gap-1 justify-center relative">
+                <p class="font-label text-on-surface-variant text-xs uppercase tracking-widest">TRACE IDENTITY</p>
+                <h1 id="prof-id" class="font-headline text-4xl sm:text-5xl font-black uppercase text-on-surface tracking-tighter text-neon-glow">...</h1>
+            </div>
+            
+            <button id="btn-settings" onclick="document.getElementById('settings-modal').showModal()" style="display:none;" class="absolute top-8 right-8 text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-3xl">settings</span>
+            </button>
+        </header>
+
+        <section class="flex flex-col md:flex-row gap-8 w-full mt-4">
+            <div class="flex-1 flex flex-col gap-4">
+                <h2 class="font-headline text-primary font-bold uppercase tracking-widest border-b border-surface-variant pb-2">Recent Signals (Posts)</h2>
+                <div id="prof-posts" class="flex flex-col gap-4"></div>
+            </div>
+            <div class="flex-1 flex flex-col gap-4">
+                <h2 class="font-headline text-secondary font-bold uppercase tracking-widest border-b border-surface-variant pb-2">Recent Exploit Commits (Comments)</h2>
+                <div id="prof-comments" class="flex flex-col gap-4"></div>
+            </div>
+        </section>
+
+    </main>
+    <script type="module" src="assets/js/pages/profileView.js"></script>
+</body>
+
+</html>

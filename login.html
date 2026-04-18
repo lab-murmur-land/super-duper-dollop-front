@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>42ITIRAF - The Raw Signal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#1a1919", "primary": "#9cff93", "primary-dim": "#00ec3b",
+                        "background": "#0e0e0e", "surface": "#0e0e0e", "surface-dim": "#0e0e0e",
+                        "surface-container-low": "#131313", "surface-container-lowest": "#000000",
+                        "surface-container-high": "#201f1f", "surface-container-highest": "#262626",
+                        "surface-bright": "#2c2c2c", "surface-variant": "#262626",
+                        "on-background": "#ffffff", "on-surface": "#ffffff",
+                        "on-surface-variant": "#adaaaa", "outline": "#777575", "outline-variant": "#494847",
+                        "secondary": "#ff7436", "secondary-container": "#a63b00", "secondary-dim": "#ff7436",
+                        "error": "#ff7351", "on-primary": "#006413"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Space Grotesk", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            font-family: theme('fontFamily.body');
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .ambient-glow { box-shadow: 0 0 40px rgba(156, 255, 147, 0.05); }
+        .ghost-border { border: 1px solid rgba(73, 72, 71, 0.15); }
+        .thread-line { border-left: 2px solid rgba(73, 72, 71, 0.15); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000000; }
+        ::-webkit-scrollbar-thumb { background: #262626; }
+        details > summary::-webkit-details-marker { display: none; }
+        .text-neon-glow { text-shadow: 0 0 10px rgba(156, 255, 147, 0.4); }
+        .box-glow { box-shadow: 0 0 40px rgba(156, 255, 147, 0.05); }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col antialiased">
+    
+    <nav class="fixed top-0 w-full z-50 rounded-none border-b border-[#494847]/15 bg-[#131313] flat shadow-none bg-[#0e0e0e] text-[#00FF41] font-['Space_Grotesk'] tracking-tighter uppercase text-sm flex flex-col w-full">
+        <div class="flex justify-between items-center px-4 md:px-8 py-3 w-full relative">
+            <a href="index.html" class="text-xl md:text-2xl font-black text-[#00FF41] tracking-[-0.04em] shrink-0 md:mr-12 cursor-pointer hover:bg-[#201f1f] p-2 active:scale-[0.98] transition-transform duration-100 flex gap-2 no-underline items-center">
+                42ITIRAF
+            </a>
+            <div class="hidden md:flex flex-1 justify-start gap-8 h-full items-center pt-2">
+                <a href="index.html" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors pb-1 border-b-2 border-transparent hover:bg-[#201f1f] px-2">LAST POSTS</a>
+                <a href="top.html" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors pb-1 border-b-2 border-transparent hover:bg-[#201f1f] px-2">TOP POSTS</a>
+                <a href="trending.html" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors pb-1 border-b-2 border-transparent hover:bg-[#201f1f] px-2">TRENDING POSTS</a>
+                <a href="controversial.html" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors pb-1 border-b-2 border-transparent hover:bg-[#201f1f] px-2">CONTROVERSIAL POSTS</a>
+                
+            </div>
+            
+            <!-- Trailing Actions -->
+            <div class="flex items-center gap-2 md:gap-6 shrink-0">
+                <div class="flex gap-2 md:gap-4">
+                    <button id="nav-search-btn" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors hover:bg-[#201f1f] p-2 active:scale-[0.98] transition-transform duration-100 flex items-center justify-center">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                    <a href="login.html" id="nav-account-btn" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors hover:bg-[#201f1f] p-2 active:scale-[0.98] flex items-center justify-center">
+                        <span class="material-symbols-outlined">account_circle</span>
+                    </a>
+                    <a href="profile.html?id=CURRENT_USER" id="nav-profile-btn" style="display:none;" class="text-[#adaaaa] hover:text-[#00FF41] transition-colors hover:bg-[#201f1f] p-2 active:scale-[0.98] flex items-center justify-center">
+                        <span class="material-symbols-outlined">person</span>
+                    </a>
+                    <button id="nav-logout-btn" class="hidden text-error hover:text-error-dim transition-colors hover:bg-[#201f1f] p-2 active:scale-[0.98] flex items-center justify-center" onclick="logoutUser()">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+                <a href="new-post.html" id="nav-new-post" style="display:none;" class="md:flex items-center bg-primary text-on-primary font-bold px-6 py-2 hover:bg-primary-dim transition-colors active:scale-[0.98] cursor-pointer">
+                    NEW SIGNAL
+                </a>
+            </div>
+        </div>
+        <!-- Search Bar Dropdown -->
+        <div id="nav-search-bar" class="hidden w-full bg-[#131313] border-t border-[#494847]/15 p-4 flex justify-center shadow-lg">
+            <input type="text" placeholder="Trace signal ID, topic, or content..." class="w-full max-w-2xl bg-[#000000] border border-[#494847] text-[#9cff93] font-label text-lg p-3 placeholder:text-[#adaaaa]/30 focus:outline-none focus:border-[#00FF41] transition-colors" />
+        </div>
+    </nav>
+
+    <main class="flex-grow flex flex-col items-center justify-center p-6 lg:p-12 mt-16 bg-background text-on-surface">
+        <div class="w-full max-w-4xl flex flex-col gap-12 pt-8">
+            <div class="flex flex-col gap-2">
+                <p class="font-label text-sm uppercase tracking-widest text-primary opacity-80">Authorization Protocol</p>
+                <h1 class="font-headline text-5xl md:text-6xl font-bold tracking-tighter text-on-surface">ACCESS_KEY</h1>
+            </div>
+            
+            <div id="auth-box" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Login Card -->
+                <div class="bg-surface-container-low p-8 flex flex-col gap-6 relative group border border-outline-variant hover:border-outline transition-all duration-300">
+                    <div class="absolute inset-0 border border-primary opacity-0 pointer-events-none group-hover:opacity-20 transition-opacity"></div>
+                    <div class="flex justify-between items-start">
+                        <h2 class="font-headline text-2xl font-bold tracking-tight text-on-surface">Enter<br/>Trace Core</h2>
+                        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors text-3xl">login</span>
+                    </div>
+                    <p class="font-body text-sm text-on-surface-variant flex-grow">
+                        Input your 6-digit Nickname and Password.
+                    </p>
+                    <div class="flex flex-col gap-4 mt-2">
+                        <div class="flex flex-col gap-2">
+                            <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Nickname / ID</label>
+                            <input id="login-nick" class="bg-surface-container-lowest border border-outline-variant text-primary font-label text-lg tracking-widest p-4 placeholder:text-on-surface-variant placeholder:opacity-30 focus:outline-none focus:border-primary transition-colors w-full" placeholder="123456" type="text"/>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Password</label>
+                            <input id="login-pass" class="bg-surface-container-lowest border border-outline-variant text-on-surface font-body p-4 placeholder:text-on-surface-variant placeholder:opacity-30 focus:outline-none focus:border-primary transition-colors w-full" placeholder="••••••••" type="password"/>
+                        </div>
+                    </div>
+                    <p id="login-error" class="hidden text-error text-xs uppercase mt-1 font-label"></p>
+                    <div class="flex items-center gap-2 border border-surface-variant px-3 py-2 bg-surface-dim mt-2 hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('captcha-login').click();">
+                        <input type="checkbox" id="captcha-login" class="h-4 w-4 bg-transparent border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer pointer-events-none"/>
+                        <label for="captcha-login" class="font-label text-xs uppercase tracking-widest text-on-surface-variant cursor-pointer pointer-events-none select-none">VERIFY HUMAN ORIGIN</label>
+                    </div>
+                    <button onclick="handleLogin()" class="bg-transparent text-primary font-headline font-bold uppercase tracking-widest py-4 px-6 border border-primary hover:bg-primary hover:text-black transition-all mt-2 text-sm flex justify-center items-center gap-2 w-full cursor-pointer">
+                        <span>Execute Login</span>
+                        <span class="material-symbols-outlined text-sm">terminal</span>
+                    </button>
+                </div>
+
+                <!-- Signup Card -->
+                <div class="bg-surface-container-low p-8 flex flex-col gap-6 relative group box-glow border border-outline-variant hover:border-outline transition-all duration-300">
+                    <div class="absolute inset-0 border border-primary opacity-0 pointer-events-none group-hover:opacity-20 transition-opacity"></div>
+                    <div class="flex justify-between items-start">
+                        <h2 class="font-headline text-2xl font-bold tracking-tight text-on-surface">Generate<br/>New Key</h2>
+                        <span class="material-symbols-outlined text-primary text-3xl">key</span>
+                    </div>
+                    <p class="font-body text-sm text-on-surface-variant">
+                        Enter a strong password. The system will generate a guaranteed anonymous 6-digit identity for you. This action cannot be reversed.
+                    </p>
+                    
+                    <div id="signup-step-1" class="flex flex-col gap-4 flex-grow">
+                        <div class="flex flex-col gap-2">
+                            <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">New Password</label>
+                            <input id="signup-pass" class="bg-surface-container-lowest border border-outline-variant text-on-surface font-body p-4 placeholder:text-on-surface-variant placeholder:opacity-30 focus:outline-none focus:border-primary transition-colors w-full" placeholder="••••••••" type="password"/>
+                        </div>
+                        <div class="flex items-center gap-2 border border-surface-variant px-3 py-2 bg-surface-dim hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('captcha-signup').click();">
+                            <input type="checkbox" id="captcha-signup" class="h-4 w-4 bg-transparent border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer pointer-events-none"/>
+                            <label for="captcha-signup" class="font-label text-xs uppercase tracking-widest text-on-surface-variant cursor-pointer pointer-events-none select-none">VERIFY HUMAN ORIGIN</label>
+                        </div>
+                        <button onclick="handleSignup()" class="bg-primary text-black font-headline font-bold uppercase tracking-widest py-4 px-6 hover:bg-primary-dim transition-colors mt-auto text-sm flex justify-center items-center gap-2 w-full cursor-pointer">
+                            <span>Initialize Protocol</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+
+                    <!-- Step 2: Show resulting ID -->
+                    <div id="signup-step-2" class="hidden flex flex-col gap-4 flex-grow justify-center pb-8 border-t border-outline-variant pt-4">
+                        <p class="font-label text-primary uppercase text-xs">YOUR NEW IDENTITY IS ACTIVE:</p>
+                        <div class="bg-surface-container-lowest p-6 border border-primary flex items-center justify-center">
+                            <code id="signup-generated-id" class="font-label text-primary text-5xl tracking-widest text-neon-glow leading-none"></code>
+                        </div>
+                        <p class="font-body text-xs text-error mt-4">WARNING: Write this 6-digit number down. Without it and your password, the account is lost eternally.</p>
+                        <button onclick="window.location.href='login.html'" class="bg-surface-variant text-on-surface font-headline font-bold uppercase tracking-widest py-4 px-6 hover:bg-[#333] transition-colors mt-4 text-sm flex justify-center items-center gap-2 w-full cursor-pointer">
+                            <span>Continue to Login</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logged in view -->
+            <div id="logged-in-box" class="hidden bg-surface-container-high p-8 flex flex-col gap-6 text-center border-l-4 border-primary mt-8">
+                <h2 class="text-2xl font-headline font-bold text-primary">SESSION ACTIVE</h2>
+                <p class="text-on-surface font-body">You are already connected to the Trace Core.</p>
+                <button onclick="logoutUser()" class="mx-auto bg-error text-on-error font-headline px-6 py-2 uppercase hover:bg-error-dim max-w-sm w-full font-bold">Destroy Session (Logout)</button>
+            </div>
+
+        </div>
+    </main>
+    
+<script type="module">
+        import { authService } from './assets/js/services/authService.js';
+        import { ui } from './assets/js/components/ui.js';
+        
+        ui.setupNavbar(authService.getCurrentUser());
+        
+        window.handleLogin = async function() {
+            if(!ui.enforceCaptcha('captcha-login')) return;
+            try {
+                await authService.login(document.getElementById('login-nick').value, document.getElementById('login-pass').value);
+                window.location.href = 'index.html';
+            } catch(e) {
+                const el = document.getElementById('login-error');
+                el.innerText = e.message;
+                el.classList.remove('hidden');
+            }
+        };
+        window.handleSignup = async function() {
+            if(!ui.enforceCaptcha('captcha-signup')) return;
+            const pass = document.getElementById('signup-pass').value;
+            if(pass.length < 4) return alert('Password too weak');
+            const id = await authService.signup(pass);
+            document.getElementById('signup-step-1').classList.add('hidden');
+            document.getElementById('signup-step-2').classList.remove('hidden');
+            document.getElementById('signup-step-2').classList.add('flex');
+            document.getElementById('signup-generated-id').innerText = id;
+        };
+        window.logoutUser = function() {
+            authService.logout();
+            window.location.href = 'index.html';
+        };
+        </script>
+        
+</body>
+
+</html>
