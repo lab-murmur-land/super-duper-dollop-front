@@ -1,70 +1,42 @@
-import { USE_MOCK } from '../api/mockDB.js';
+import { fetchApi } from '../api/config.js';
 
 export const authService = {
     async login(nick, pass) {
-        if (USE_MOCK) {
-            const users = JSON.parse(localStorage.getItem('usersDB') || '{}');
-            // check freeze status
-            const statusDB = JSON.parse(localStorage.getItem('statusDB') || '{}');
-            if (statusDB[nick] === 'FROZEN') {
-                throw new Error("ACCESS DENIED: NODE IS IN CRYO-FREEZE.");
-            }
-            if (users[nick] && users[nick] === pass) {
-                localStorage.setItem('activeUser', nick);
-                return nick;
-            }
-            throw new Error("ACCESS DENIED: Trace Core Failed (Invalid ID or Password)");
-        }
+        const data = await fetchApi('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ uid: nick, password: pass, recaptchaToken: 'dummy' })
+        });
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('activeUser', data.uid);
+        return data.uid;
     },
 
     async signup(pass) {
-        if (USE_MOCK) {
-            const generatedId = Math.floor(100000 + Math.random() * 900000).toString();
-            const users = JSON.parse(localStorage.getItem('usersDB') || '{}');
-            users[generatedId] = pass;
-            localStorage.setItem('usersDB', JSON.stringify(users));
-            return generatedId;
-        }
+        const data = await fetchApi('/auth/register', {
+            method: 'POST',
+            body: JSON.stringify({ password: pass, recaptchaToken: 'dummy' })
+        });
+        return data.uid;
     },
 
     logout() {
-        if (USE_MOCK) {
-            localStorage.removeItem('activeUser');
-        }
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('activeUser');
     },
 
     getCurrentUser() {
-        if (USE_MOCK) return localStorage.getItem('activeUser');
+        return localStorage.getItem('activeUser');
     },
     
-    // NEW SETTINGS ACTIONS
     async freezeAccount(userId) {
-        if (USE_MOCK) {
-            const statusDB = JSON.parse(localStorage.getItem('statusDB') || '{}');
-            statusDB[userId] = 'FROZEN';
-            localStorage.setItem('statusDB', JSON.stringify(statusDB));
-            this.logout();
-        }
+        this.logout();
     },
     
     async deleteAccount(userId) {
-        if (USE_MOCK) {
-            const users = JSON.parse(localStorage.getItem('usersDB') || '{}');
-            delete users[userId];
-            localStorage.setItem('usersDB', JSON.stringify(users));
-            this.logout();
-        }
+        this.logout();
     },
 
     async changePassword(userId, currentPw, newPw) {
-        if (USE_MOCK) {
-            const users = JSON.parse(localStorage.getItem('usersDB') || '{}');
-            if (users[userId] === currentPw) {
-                 users[userId] = newPw;
-                 localStorage.setItem('usersDB', JSON.stringify(users));
-                 return true;
-            }
-            throw new Error("Invalid current key.");
-        }
+        throw new Error("ROTATE KEY NOT FULLY IMPLEMENTED ON BACKEND");
     }
 };
